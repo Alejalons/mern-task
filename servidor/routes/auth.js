@@ -1,7 +1,6 @@
-//Rutas para crear usuarios
+//Rutas para autenticar usuarios
 const express = require('express');
 const router = express.Router();
-const usuarioControllers = require('../controllers/usuariosControllers');
 const { check } = require('express-validator');
 
 // Crea un usuario
@@ -9,7 +8,6 @@ const { check } = require('express-validator');
 router.post('/', 
     //array de validacion de express-validator
     [ //reglas
-        check('nombre',  'El nombre es obligatorio').not().isEmpty(),
         check('email', 'Agrega un email valido').isEmail(),
         check('password', 'El password debe ser minimo de 6 caracteres').isLength({ min: 6})
     ],
