@@ -14,7 +14,7 @@ module.exports = function (req, res, next){
     //validar el token
     try {
         const cifrado = jwt.verify(token, process.env.SECRETA);
-        req.usuario = cifrado.usuario //payload inicializado
+        req.usuario = cifrado.usuario //payload inicializado, se guarda  el req.usuario
         next()//para que pase al siguiente middleware
     } catch (error) {
         res.status(401).json({msg: 'Token no válido'});
