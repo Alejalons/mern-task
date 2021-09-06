@@ -17,6 +17,6 @@ module.exports = function (req, res, next){
         req.usuario = cifrado.usuario //payload inicializado, se guarda  el req.usuario
         next()//para que pase al siguiente middleware
     } catch (error) {
-        res.status(401).json({msg: 'Token no válido'});
+        res.status(401).json({msg: `Token no válido: ${error}`});
     }
 }
