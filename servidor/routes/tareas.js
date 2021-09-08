@@ -7,4 +7,18 @@ const { check } = require('express-validator');
 
 //crear una tarea
 //api/tareas
-router.po
+router.post('/',
+    auth,
+    [
+        check('nombre', 'El nombre es Obligatorio').not().isEmpty(),
+        check('proyecto', 'El proyecto es Obligaotrio').not().isEmpty()
+    ],
+    tareaController.crearTarea
+)
+
+router.get('/',
+    auth,
+    tareaController.obtenerTareas
+)
+
+module.exports = router;

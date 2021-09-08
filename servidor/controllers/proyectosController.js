@@ -109,6 +109,6 @@ exports.eliminarProyecto = async (req, res) => {
         
     } catch (error) {
         console.log(error)
-        res.status(500).send('Error en el servidor')
+        res.status(500).send(`Error en el servidor ${error}`)
     }
 }
