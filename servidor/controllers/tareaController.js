@@ -66,3 +66,69 @@ exports.obtenerTareas = async  (req, res) => {
     }
     
 }
+
+exports.actualizarTarea = async(req, res) => {
+    try {
+        const { proyecto, nombre, estado } = req.body;
+
+        //si la tarea existe o no
+        let tarea = await Tarea.findById(req.params.id);
+        if(!tarea){
+            return res.status(404).json({msg: 'Tarea no existe'})
+        }
+
+        //buscar proyecto por id
+        let proyecto_existe = await Proyecto.findById(proyecto)
+
+        //revisar si el proyecto actual pertenece al usuario autenticado
+        if(proyecto_existe.creador.toString() !== req.usuario.id){
+            return res.status(401).json({msg: 'No Autorizado'})
+        }
+
+        //crear un objeto con la nueva informacion
+        const nuevaTarea = {};
+        if(nombre ) nuevaTarea.nombre = nombre;
+        if(estado) nuevaTarea.estado = estado;
+
+        tarea = await Tarea.findOneAndUpdate(
+            {_id: req.params.id},
+            nuevaTarea,
+            {new: true}
+        )
+
+        res.json({tarea});
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(`Hubo un error al actualizar una tarea: ${error}`)
+    }
+}
+
+exports.eliminarTarea = async(req, res) => {
+    try {
+        const { proyecto } = req.body;
+
+        //si la tarea existe o no
+        let tarea = await Tarea.findById(req.params.id);
+        if(!tarea){
+            return res.status(404).json({msg: 'Tarea no existe'})
+        }
+
+        //buscar proyecto por id
+        let proyecto_existe = await Proyecto.findById(proyecto)
+
+        //revisar si el proyecto actual pertenece al usuario autenticado
+        if(proyecto_existe.creador.toString() !== req.usuario.id){
+            return res.status(401).json({msg: 'No Autorizado'})
+        }
+
+        // /7eliminar
+
+        await Tarea.findOneAndRemove({_id: req.params.id})
+        res.json({msg: 'Tarea Eliminada'})
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(`Hubo un error al eliminar una tarea: ${error}`)
+    }
+}
